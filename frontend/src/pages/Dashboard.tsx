@@ -1,15 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Search } from "@/components/custom/Search";
 import logo from "../assets/logo.png";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { ModeToggle } from "@/components/custom/mode-toggle";
 import { TrendBar } from "@/components/custom/TrendBar";
-import { Calculator, Smile, TrendingUp } from "lucide-react";
+import { Calculator, Github, MoveDown, TrendingUp } from "lucide-react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRecoilValue } from "recoil";
-import { trendAtTop } from "@/store/atoms";
+import { trendAtLast, trendAtTop } from "@/store/atoms";
+import { TypeIcon } from "@/components/custom/TypeIcon";
+import Footer from "@/components/custom/Footer";
+import CustomBuzz from "@/components/custom/CustomBuzz";
 
 export const metadata = {
   title: "Dashboard",
@@ -20,15 +22,25 @@ const queryClient = new QueryClient()
 
 export default function DashboardPage() {
   const topTrend = useRecoilValue(trendAtTop);
-  let sentiment = ""
+  const lastTrent = useRecoilValue(trendAtLast)
 
-  if (topTrend?.averageSentiment !== undefined) {
-    sentiment = (topTrend.averageSentiment >= -1 && topTrend.averageSentiment < 0)
-      ? "Negative"
-      : (topTrend.averageSentiment >= 0 && topTrend.averageSentiment < 0.5)
-        ? "Slightly Positive"
-        : "Positive";
+  function sentimalRes(value: number | undefined): string {
+    let sentiment = ""
+
+    if (value !== undefined) {
+      sentiment = (value >= -1 && value < -0.5)
+        ? "Negative"
+        : (value >= -0.5 && value < 0)
+          ? "Slightly Negative"
+          : (value >= 0 && value < 0.5)
+            ? "Slightly Positive"
+            : "Positive";
+    }
+    return sentiment
   }
+
+
+
 
   return (
     <>
@@ -43,28 +55,25 @@ export default function DashboardPage() {
             </div>
             <div className="ml-auto flex items-center space-x-4">
               <ModeToggle />
-              <Search />
+
+              <a href="https://github.com/momo-shogun">
+                <Button variant="ghost" className="flex gap-2 sm:gap-3">
+                  <Github className="w-4 h-4 sm:w-5 sm:h-5" />
+                </Button>
+              </a>
             </div>
           </div>
         </div>
         <div className="flex-1 space-y-4 p-8 pt-6">
           <div className="flex items-center justify-between space-y-2">
-            <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-            <div className="flex items-center space-x-2">
-              <Button>Download</Button>
-            </div>
+            <h2 className="text-3xl font-bold tracking-tight">Real-Time Social Media Trends</h2>
+
           </div>
           <Tabs defaultValue="Trending" className="space-y-4">
             <TabsList>
               <TabsTrigger value="Trending">Trending</TabsTrigger>
-              <TabsTrigger value="analytics" disabled>
-                Analytics
-              </TabsTrigger>
-              <TabsTrigger value="reports" disabled>
-                Reports
-              </TabsTrigger>
-              <TabsTrigger value="notifications" disabled>
-                Notifications
+              <TabsTrigger value="Custom Buzz" >
+                Custom Buzz
               </TabsTrigger>
             </TabsList>
             <TabsContent value="Trending" className="space-y-4">
@@ -72,7 +81,7 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Most Used Word
+                      Most Used Word #1
                     </CardTitle>
                     <Calculator size={20} />
                   </CardHeader>
@@ -84,60 +93,35 @@ export default function DashboardPage() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Sentimental Analysis
+                      Sentimental Analysis #1
                     </CardTitle>
+                    <div className="">{topTrend?.averageSentiment.toFixed(2)}</div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">{sentiment}</div>
+                  <CardContent className="flex justify-between">
+                    <div className="text-2xl font-bold">{sentimalRes(topTrend?.averageSentiment)}</div>
+                    <TypeIcon type={sentimalRes(topTrend?.averageSentiment)} />
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                    <CardTitle className="text-sm font-medium">Sales</CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <rect width="20" height="14" x="2" y="5" rx="2" />
-                      <path d="M2 10h20" />
-                    </svg>
+                    <CardTitle className="text-sm font-medium">Trend At Last #10</CardTitle>
+                    <MoveDown size={20} />
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+12,234</div>
-                    <p className="text-xs text-muted-foreground">
-                      +19% from last month
-                    </p>
+                  <CardContent className="flex justify-between">
+                    <div className="text-2xl font-bold">{lastTrent?.word}</div>
+                    <div className="text-2xl font-bold">{lastTrent?.count}</div>
                   </CardContent>
                 </Card>
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                     <CardTitle className="text-sm font-medium">
-                      Active Now
+                      Sentimental Analysis #10
                     </CardTitle>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      className="h-4 w-4 text-muted-foreground"
-                    >
-                      <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                    </svg>
+                    <div className="">{lastTrent?.averageSentiment.toFixed(2)}</div>
                   </CardHeader>
-                  <CardContent>
-                    <div className="text-2xl font-bold">+573</div>
-                    <p className="text-xs text-muted-foreground">
-                      +201 since last hour
-                    </p>
+                  <CardContent className="flex justify-between">
+                    <div className="text-2xl font-bold">{sentimalRes(lastTrent?.averageSentiment)}</div>
+                    <TypeIcon type={sentimalRes(lastTrent?.averageSentiment)} />
                   </CardContent>
                 </Card>
               </div>
@@ -164,9 +148,11 @@ export default function DashboardPage() {
               </div>
 
             </TabsContent>
+            <CustomBuzz />
           </Tabs>
         </div>
       </div >
+      <Footer />
     </>
   );
 }

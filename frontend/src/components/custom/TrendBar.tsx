@@ -23,7 +23,7 @@ const chartConfig: ChartConfig = {
         label: "Frequency",
         color: "hsl(var(--chart-1))",
     },
-};
+} satisfies ChartConfig
 
 // Fetch the data from the API
 const fetchTrend = async (): Promise<WordFrequency> => {
@@ -38,7 +38,7 @@ export function TrendBar() {
     const { data, isError } = useQuery<WordFrequency>({
         queryKey: ['data'],
         queryFn: fetchTrend,
-        refetchInterval: 500,
+        refetchInterval: 1000,
     });
 
 

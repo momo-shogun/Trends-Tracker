@@ -7,7 +7,7 @@ const app = express();
 app.use(cors())
 app.use(express.json())
 dotenv.config();
-let limit = 100;
+let limit = 50;
 
 export type polarityValue = {
   polarity: number,
