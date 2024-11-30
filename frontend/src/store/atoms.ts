@@ -1,5 +1,11 @@
 import { atom, selector } from "recoil"
-import { WordFrequency } from "@/components/custom/TrendBar"
+
+
+export type WordFrequency = {
+    word: string;
+    count: number;
+    averageSentiment: number
+}[];
 
 export const chartData = atom<WordFrequency>({
     key: 'chartDataState',

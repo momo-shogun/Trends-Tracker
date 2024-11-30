@@ -13,13 +13,10 @@ import {
 import axios from "axios";
 import { useEffect } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { chartData } from "@/store/atoms";
+import { chartData, WordFrequency } from "@/store/atoms";
 
 // Define the data type for the updated API response
-export type WordFrequency = {
-    word: string;
-    count: number;
-}[];
+
 
 const chartConfig: ChartConfig = {
     frequency: {
@@ -30,7 +27,7 @@ const chartConfig: ChartConfig = {
 
 // Fetch the data from the API
 const fetchTrend = async (): Promise<WordFrequency> => {
-    const response = await axios.get<WordFrequency>('http://localhost:3000/trending');
+    const response = await axios.get<WordFrequency>('http://localhost:3002/trending');
     return response.data;
 };
 
@@ -41,7 +38,7 @@ export function TrendBar() {
     const { data, isError } = useQuery<WordFrequency>({
         queryKey: ['data'],
         queryFn: fetchTrend,
-        refetchInterval: 2000,
+        refetchInterval: 500,
     });
 
 
@@ -59,7 +56,7 @@ export function TrendBar() {
                 <BarChart data={trendsData}>
                     <CartesianGrid vertical={false} />
                     <XAxis
-                        dataKey="word" // Use "word" key from the new API response
+                        dataKey="word" // trends data which field to display
                         tickLine={false}
                         tickMargin={10}
                         axisLine={false}
@@ -70,12 +67,13 @@ export function TrendBar() {
                         content={<ChartTooltipContent hideLabel />}
                     />
                     <Bar
-                        dataKey="count" // Use "count" key from the new API response
+                        dataKey="count" // trends data which field to display
                         fill="hsl(var(--chart-1))"
                         radius={8}
                         animationDuration={1000}
                         isAnimationActive={true}
                     />
+
                 </BarChart>
             </ChartContainer>
         </>
