@@ -1,15 +1,16 @@
-import { Repeat2, ThumbsUp, X } from "lucide-react";
+import { Calculator, Repeat2, ThumbsUp, TrendingUp, X } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { TabsContent } from "../ui/tabs";
-import { useRecoilState } from "recoil";
+import { useRecoilState, } from "recoil";
 import { filterTrend, filterTrendResult } from "@/store/atoms";
 import axios from "axios";
 import { useDebouncer } from "@/hooks/useDebouncer";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { TypeIcon } from "./TypeIcon";
 import { Skeleton } from "../ui/skeleton";
 import { useState } from "react";
+import { BuzzChart } from "./BuzzChart";
 
 const CustomBuzz = () => {
     const [filter, setFilter] = useRecoilState(filterTrend);
@@ -95,7 +96,7 @@ const CustomBuzz = () => {
                         <div className="text-red-500 text-lg font-semibold">{error}</div>
                     ) : result.word === "" ? (
                         <Skeleton className="w-auto h-96 rounded-md" />
-                    ) : (
+                    ) : (<>
                         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                             {/* Cards */}
                             <Card>
@@ -103,6 +104,7 @@ const CustomBuzz = () => {
                                     <CardTitle className="text-sm font-medium">
                                         Number of People Used
                                     </CardTitle>
+                                    <Calculator size={22} className="text-green-400" />
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     <div className="text-2xl font-bold">{result?.word}</div>
@@ -124,11 +126,11 @@ const CustomBuzz = () => {
                             <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                                     <CardTitle className="text-sm font-medium">Average Likes</CardTitle>
-                                    {<ThumbsUp size={20} />}
+                                    {<ThumbsUp size={20} className="text-blue-400" />}
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     {<div className="text-2xl font-bold">{result?.word}</div>}
-                                    {<div className="text-2xl font-bold">{result?.avgLikes}</div>}
+                                    {<div className="text-2xl font-bold">{result?.avgLikes.toFixed(0)}</div>}
                                 </CardContent>
                             </Card>
                             <Card>
@@ -136,14 +138,31 @@ const CustomBuzz = () => {
                                     <CardTitle className="text-sm font-medium">
                                         Retweets
                                     </CardTitle>
-                                    <Repeat2 size={20} />
+                                    <Repeat2 size={20} className="text-blue-400" />
                                 </CardHeader>
                                 <CardContent className="flex justify-between">
                                     {<div className="text-2xl font-bold">{result?.word}</div>}
-                                    {<div className="text-2xl font-bold">{result?.avgRetweets}</div>}
+                                    {<div className="text-2xl font-bold">{result?.avgRetweets.toFixed(0)}</div>}
                                 </CardContent>
                             </Card>
                         </div>
+                        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+                            <Card className="col-span-4">
+                                <CardHeader className="flex flex-row justify-between items-center">
+                                    <CardTitle>Overall Performance</CardTitle>
+                                    {/* <CardTitle><Badge variant={"destructive"}>Live</Badge></CardTitle> */}
+                                </CardHeader>
+                                <CardContent>
+                                    <BuzzChart />
+                                </CardContent>
+                                <CardFooter className="flex-col items-start gap-2 text-sm">
+                                    <div className="flex gap-2 font-medium leading-none">
+                                        Live Updates of Your Searched Trend <TrendingUp className="h-4 w-4" />
+                                    </div>
+                                </CardFooter>
+                            </Card>
+                        </div></>
+
                     )}
                 </div>
             </TabsContent>
