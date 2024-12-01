@@ -1,4 +1,5 @@
 # Real-time Social Media Trend Tracker 
+![Uploading image.png…]()
 
 This project is a real-time dashboard visualizing trending topics on social media. It leverages a combination of modern technologies to analyze and present data effectively.  
 
