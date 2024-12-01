@@ -133,5 +133,5 @@ app.get('/frequentPostiveWords', async (req, res) => {
 });
 
 
-const port = 3002;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));

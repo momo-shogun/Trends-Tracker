@@ -53,7 +53,7 @@ app.get('/trending', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     }
     catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Failed to fetch trending topics' });
+        res.status(250).json({ error: 'Failed to fetch trending topics' });
     }
 }));
 app.post('/search', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -112,5 +112,5 @@ app.get('/frequentPostiveWords', (req, res) => __awaiter(void 0, void 0, void 0,
         res.status(500).json({ error: 'Failed to fetch data' });
     }
 }));
-const port = 3002;
+const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server listening on port ${port}`));
