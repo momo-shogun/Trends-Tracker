@@ -1,10 +1,10 @@
 # Real-time Social Media Trend Tracker 
 
 ![dashboardLight](https://github.com/user-attachments/assets/b2972b81-201c-43e6-98f4-da5785b700fc)
-![dashboardSearch](https://github.com/user-attachments/assets/1f31c35d-6c65-4dad-bc37-6345e1512b9e)
 
 
 This project is a real-time dashboard visualizing trending topics on social media. It leverages a combination of modern technologies to analyze and present data effectively.  
+![dashboardSearch](https://github.com/user-attachments/assets/1f31c35d-6c65-4dad-bc37-6345e1512b9e)
 
 **Key Features:**
 
