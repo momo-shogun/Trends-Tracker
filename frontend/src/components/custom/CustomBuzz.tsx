@@ -19,7 +19,7 @@ const CustomBuzz = () => {
     const fetchTrend = async (searchQuery: string) => {
         try {
             setError(null); // Clear any previous errors
-            const response = await axios.post('http://localhost:3002/search', {
+            const response = await axios.post('https://trends-tracker.onrender.com/search', {
                 search: searchQuery,
             });
             setResult(response.data);
