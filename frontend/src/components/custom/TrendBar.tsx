@@ -27,7 +27,7 @@ const chartConfig: ChartConfig = {
 
 // Fetch the data from the API
 const fetchTrend = async (): Promise<WordFrequency> => {
-    const response = await axios.get<WordFrequency>('http://localhost:3002/trending');
+    const response = await axios.get<WordFrequency>('https://trends-tracker.onrender.com/trending');
     return response.data;
 };
 
