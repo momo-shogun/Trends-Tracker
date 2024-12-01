@@ -52,19 +52,63 @@ app.get('/trending', async (req, res) => {
     res.json(top10);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch trending topics' });
+    res.status(250).json({ error: 'Failed to fetch trending topics' });
   }
 });
 
 app.post('/search', async (req, res) => {
   const search = req.body.search
-  const value = trendData.get(search)
-  if (!value) {
-    res.status(404).json({ error: 'No records' })
-    return
+
+  type trendButies = {
+    polarity: number,
+    count: number
+    likes: number,
+    retweets: number
   }
-  res.json({ count: value?.count, averageSentiment: value?.polarity })
+
+  const searchedTrend = new Map<string, trendButies>()
+
+  try {
+    let tweets: any = await tweetModel.find({}).limit(limit);
+
+    if (!tweets || tweets.length === 0) {
+      res.json({ message: "No data found" });
+      return
+    }
+
+    tweets.forEach((tweet: any) => {
+      //@ts-ignore
+      tweet.cleaned_text.toLowerCase().split(/\s+/).forEach((word) => {
+        if (!searchedTrend.get(word)) {
+          searchedTrend.set(word, { polarity: 0, count: 0, likes: 0, retweets: 0 })
+        }
+        let prevValue = searchedTrend.get(word)
+        if (prevValue) {
+          prevValue.count++
+          prevValue.polarity += tweet.polarity
+          prevValue.likes += tweet.Likes
+          prevValue.retweets += tweet.Retweets
+        }
+      })
+    })
+
+    const sortedWords = [...searchedTrend.entries()]
+      .map(([word, data]) => ({ word, count: data.count, averageSentiment: data.polarity / data.count, avgLikes: data.likes / data.count, avgRetweets: data.retweets / data.count }))
+
+    const result = sortedWords.filter((e) => e.word === search)
+    if (!result) {
+      res.json({ error: 'Doesnt exits' })
+      return
+    }
+    res.json(result[0])
+  }
+  catch (error) {
+    console.log(error);
+    res.status(500).json({ error: 'Failed to fetch data' })
+
+  }
 })
+
 
 app.get('/frequentPostiveWords', async (req, res) => {
   let result = new Map<string, polarityValue>()

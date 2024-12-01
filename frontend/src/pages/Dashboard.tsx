@@ -39,9 +39,6 @@ export default function DashboardPage() {
     return sentiment
   }
 
-
-
-
   return (
     <>
       <div className=" flex-col md:flex">

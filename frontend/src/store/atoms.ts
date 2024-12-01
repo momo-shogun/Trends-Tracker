@@ -7,12 +7,35 @@ export type WordFrequency = {
     averageSentiment: number
 }[];
 
+type filterTrendResultTypes = {
+    word: string,
+    count: number,
+    averageSentiment: number,
+    avgLikes: number,
+    avgRetweets: number
+
+}
+
 export const chartData = atom<WordFrequency>({
     key: 'chartDataState',
     default: []
 })
 
+export const filterTrend = atom({
+    key: 'filterTrend',
+    default: ""
+})
 
+export const filterTrendResult = atom<filterTrendResultTypes>({
+    key: 'filterTrendResult',
+    default: {
+        word: "",
+        count: 0,
+        averageSentiment: 0,
+        avgLikes: 0,
+        avgRetweets: 0
+    }
+})
 
 export const trendAtTop = selector({
     key: 'trendAtTop', // Unique key for this selector
