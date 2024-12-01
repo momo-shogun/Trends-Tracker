@@ -6,8 +6,9 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route index element={<LandingPage />} />
+                <Route  element={<LandingPage />} />
                 <Route
+                    index
                     path="dashboard"
                     element={
                         <RecoilRoot>

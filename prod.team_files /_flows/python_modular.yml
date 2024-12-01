@@ -1,0 +1,46 @@
+id: python_modular
+namespace: company.team
+
+tasks:
+  - id: clean_data
+    type: io.kestra.plugin.scripts.python.Commands
+    beforeCommands:
+      - pip install pandas
+    commands:
+      - python clean_data.py
+      - ls -l
+    namespaceFiles:
+      enabled: true
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    outputFiles:
+      - cleaned_twitter_dataset.csv
+
+  - id: analyze_sentiment
+    type: io.kestra.plugin.scripts.python.Commands
+    namespaceFiles:
+      enabled: true
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    beforeCommands:
+      - pip install textblob pandas
+    commands:
+      - python analyze_sentiment.py
+    inputFiles:
+      cleaned_twitter_dataset.csv: "{{ outputs.clean_data.outputFiles['cleaned_twitter_dataset.csv'] }}"  # Access the first file in the array
+    outputFiles:
+      - sentiment_analyzed_twitter_dataset.csv
+
+  - id: insert_to_mongodb
+    type: io.kestra.plugin.scripts.python.Commands
+    namespaceFiles:
+      enabled: true
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    beforeCommands:
+      - pip install pymongo
+    commands:
+      - python insert_to_mongodb.py
+    inputFiles:
+      sentiment_analyzed_twitter_dataset.csv: "{{ outputs.analyze_sentiment.outputFiles['sentiment_analyzed_twitter_dataset.csv'] }}"
+  
