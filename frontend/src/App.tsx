@@ -8,7 +8,6 @@ export default function App() {
             <Routes>
                 <Route
                     index
-                    path="dashboard"
                     element={
                         <RecoilRoot>
                             <DashboardPage />
