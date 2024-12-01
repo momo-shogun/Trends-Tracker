@@ -10,7 +10,7 @@ const fileType: Record<string, LucideIcon> = {
 };
 
 export function TypeIcon({ type }: { type: string }) {
-    const iconClass = "text-stone-400"; // Add a soft gray color for icons
+    const iconClass = "text-stone-400 text-yellow-400"; // Add a soft gray color for icons
     const Icon = fileType[type]; // Get the corresponding icon
 
     if (!Icon) {
