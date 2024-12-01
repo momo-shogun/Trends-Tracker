@@ -6,7 +6,6 @@ export default function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route  element={<LandingPage />} />
                 <Route
                     index
                     path="dashboard"
